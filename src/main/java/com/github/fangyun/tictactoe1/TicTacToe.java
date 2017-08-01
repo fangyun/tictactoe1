@@ -99,21 +99,60 @@ public class TicTacToe {
 			{ "O", "7", "5", "3?", "1", "9", "6! or 8!" }, { "O", "7", "5", "3?", "2", "8*", "4*" },
 			{ "v653", "7", "5", "4" } };
 
-	private final static Map<Character, String> MAPPING = new HashMap<>();
+	public final static Map<Character, String> MAIN_MAP = new HashMap<>();
+	public final static Map<Character, Character> LEFT_MAP = new HashMap<>();
+	public final static Map<Character, Character> TOP_MAP = new HashMap<>();
+	public final static Map<Character, Character> RIGHT_MAP = new HashMap<>();
 
 	static {
-		MAPPING.put('3', "震");
-		MAPPING.put('4', "巽");
-		MAPPING.put('9', "离");
-		MAPPING.put('2', "坤");
-		MAPPING.put('7', "兑");
-		MAPPING.put('6', "乾");
-		MAPPING.put('1', "坎");
-		MAPPING.put('8', "艮");
-		MAPPING.put('5', "中");
+		MAIN_MAP.put('3', "震");
+		MAIN_MAP.put('4', "巽");
+		MAIN_MAP.put('9', "离");
+		MAIN_MAP.put('2', "坤");
+		MAIN_MAP.put('7', "兑");
+		MAIN_MAP.put('6', "乾");
+		MAIN_MAP.put('1', "坎");
+		MAIN_MAP.put('8', "艮");
+		MAIN_MAP.put('5', "中");
 	}
 
-	public String makePalace() {
+	static {
+		LEFT_MAP.put('3', '1');
+		LEFT_MAP.put('4', '8');
+		LEFT_MAP.put('9', '3');
+		LEFT_MAP.put('2', '4');
+		LEFT_MAP.put('7', '9');
+		LEFT_MAP.put('6', '2');
+		LEFT_MAP.put('1', '7');
+		LEFT_MAP.put('8', '6');
+		LEFT_MAP.put('5', '5');
+	}
+
+	static {
+		TOP_MAP.put('3', '7');
+		TOP_MAP.put('4', '6');
+		TOP_MAP.put('9', '1');
+		TOP_MAP.put('2', '8');
+		TOP_MAP.put('7', '3');
+		TOP_MAP.put('6', '4');
+		TOP_MAP.put('1', '9');
+		TOP_MAP.put('8', '2');
+		TOP_MAP.put('5', '5');
+	}
+	
+	static {
+		RIGHT_MAP.put('3', '9');
+		RIGHT_MAP.put('4', '2');
+		RIGHT_MAP.put('9', '7');
+		RIGHT_MAP.put('2', '6');
+		RIGHT_MAP.put('7', '1');
+		RIGHT_MAP.put('6', '8');
+		RIGHT_MAP.put('1', '3');
+		RIGHT_MAP.put('8', '4');
+		RIGHT_MAP.put('5', '5');
+	}
+
+	public String makePalace(Map<Character, Character> map) {
 		String end = " ";
 		int len = end.length();
 		StringBuilder sb = new StringBuilder();
@@ -124,7 +163,7 @@ public class TicTacToe {
 				if (e.startsWith("v")) {
 					break;
 				}
-				String conv = convert(e);
+				String conv = convert(map, e);
 				sb.append(conv).append(end);
 				hasPointerSymbol = true;
 			}
@@ -136,11 +175,16 @@ public class TicTacToe {
 		return sb.toString();
 	}
 
-	private String convert(String input) {
+	private String convert(Map<Character, Character> map, String input) {
 		char[] chs = input.toCharArray();
 		StringBuilder sb = new StringBuilder();
 		for (char ch : chs) {
-			String v = MAPPING.get(ch);
+			String v = null;
+			if (map != null) {
+				v = MAIN_MAP.get(map.get(ch));
+			} else {
+				v = MAIN_MAP.get(ch);
+			}
 			if (v != null) {
 				sb.append(v);
 			} else {
